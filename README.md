@@ -1,12 +1,12 @@
 # Portafolio Profesional - Mario Macías 💻
 
-¡Hola! Bienvenido al repositorio de mi portafolio web personal https://base-line-git-main-marioomacias-projects.vercel.app/
+¡Hola! Bienvenido al repositorio de mi portafolio web personal.
 
 Este proyecto es una carta de presentación interactiva donde detallo mi perfil, mi experiencia y mis habilidades técnicas orientadas al **Soporte IT**.
 
-## 🌐 Proyecto en vivo
+ 🌐 Proyecto en vivo
 Puedes ver el portafolio funcionando y desplegado aquí: 
-👉 [PEGA AQUÍ TU ENLACE]
+👉 https://base-line-git-main-marioomacias-projects.vercel.app/
 
 ## 🛠️ Tecnologías y Herramientas utilizadas
 Para construir y desplegar este proyecto he utilizado:
