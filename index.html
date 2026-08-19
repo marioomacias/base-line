@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mario Macias - Prime Baseline</title>
+    
+    <style>
+        /* SCROLLBAR PERSONALIZADA */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #00ffcc; border-radius: 5px; }
+        ::selection { background: #00ffcc; color: #000; }
+
+        /* PANTALLA DE CARGA NEGRA (PRELOADER) */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000000; 
+            z-index: 99999; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00ffcc;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 3.5em; 
+            font-weight: bold;
+            transition: opacity 0.8s ease; 
+        }
+        
+        /* Animación Hacker de 3 puntos (1 a 1) */
+        .loading-dots::after {
+            content: '';
+            animation: typeDots 1s infinite;
+        }
+
+        @keyframes typeDots {
+            0%   { content: ''; }
+            25%  { content: '.'; }
+            50%  { content: '..'; }
+            75%, 100% { content: '...'; }
+        }
+
+        /* FONDO ANIMADO ESTILO HACKER DISIMULADO */
+        body {
+            margin: 0; padding: 0; background-color: #030303; color: #e0e0e0; 
+            font-family: 'Courier New', Courier, monospace; overflow-x: hidden; line-height: 1.6;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px; animation: moveGrid 15s linear infinite;
+        }
+
+        /* EFECTO MONITOR CRT (Líneas de escaneo sutiles) */
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px);
+            pointer-events: none; z-index: 9999;
+        }
+
+        @keyframes moveGrid { 0% { background-position: 0 0; } 100% { background-position: 0 40px; } }
+
+        /* BARRA DE NAVEGACIÓN */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            background-color: rgba(5, 5, 5, 0.8); padding: 15px 50px; position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-logo { display: flex; flex-direction: column; text-decoration: none; }
+        .nav-logo-title { font-size: 1.8em; font-weight: bold; color: #ffffff; font-family: Arial, sans-serif; letter-spacing: -1px; }
+        .nav-logo-title span { color: #00ffcc; }
+        .nav-logo-subtitle { font-size: 0.7em; color: #888; margin-top: -5px; }
+
+        .nav-links { list-style: none; display: flex; gap: 30px; align-items: center; margin: 0; padding: 0; }
+        .nav-links li a {
+            color: #e0e0e0; text-decoration: none; font-family: Arial, sans-serif;
+            font-size: 0.9em; font-weight: bold; transition: color 0.3s; display: flex; align-items: center; gap: 6px;
+        }
+        .nav-links li a:hover { color: #00ffcc; }
+
+        /* Botón de Contacto Celeste */
+        .btn-cyan {
+            background-color: rgba(0, 255, 204, 0.1); color: #00ffcc !important; border: 1px solid #00ffcc;
+            padding: 10px 20px; border-radius: 6px; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-cyan:hover { background-color: #00ffcc; color: #000 !important; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4); }
+
+        .main-content { padding: 50px 20px; position: relative; z-index: 10; }
+
+        /* EFECTO GLASSMORPHISM */
+        .glass-panel {
+            max-width: 900px; margin: 0 auto 40px auto; background: rgba(255, 255, 255, 0.02); 
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); border-radius: 15px; padding: 40px; position: relative;
+            transition: transform 0.4s ease, box-shadow 0.4s ease; scroll-margin-top: 100px;
+        }
+        .glass-panel:hover { transform: translateY(-8px); box-shadow: 0 15px 40px 0 rgba(0, 255, 204, 0.15); border: 1px solid rgba(0, 255, 204, 0.2); }
+
+        /* BOTONES DE VENTANA */
+        .window-header { position: absolute; top: 15px; left: 20px; display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; opacity: 0.7; }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        /* TIPOGRAFÍA */
+        h1, h2, h3, h4 { color: #00ffcc; margin-top: 25px; font-family: Arial, sans-serif; border: none !important; }
+        h1 { font-size: 2.8em; margin-bottom: 10px; text-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
+        h2 { font-size: 1.5em; display: flex; align-items: center; gap: 8px;}
+        h3 { font-size: 1.2em; color: #ffffff; }
+        
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-bottom: 15px; padding: 15px; border-radius: 8px; background: rgba(255, 255, 255, 0.01); transition: all 0.3s ease; }
+        li:hover { background: rgba(255, 255, 255, 0.04); transform: translateY(-4px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+        strong { color: #00ffcc; }
+
+        /* CONSOLA ANIMADA Y COCHE CONTENIDO */
+        #consola { text-align: center; font-size: 1.2em; font-weight: bold; color: #ffffff; }
+        .oculto { display: none; visibility: hidden; }
+        pre { margin: 0; font-weight: bold; display: inline-block; text-align: left; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
+        #coche { display: block; width: 100%; overflow: hidden; white-space: pre; }
+        .cursor { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .terminal-content { text-align: center; margin-top: 20px; }
+        
+        #about-content, #portfolio-content { min-height: 150px; }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA NEGRA DE CARGA (PRELOADER CON 3 PUNTOS) -->
+    <div id="preloader">
+        <div class="loading-dots"></div>
+    </div>
+
+    <!-- BARRA DE NAVEGACIÓN -->
+    <nav class="navbar">
+        <a href="#" class="nav-logo">
+            <div class="nav-logo-title">Mario<span>Macias</span></div>
+            <div class="nav-logo-subtitle">IT Infrastructure Support</div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#about"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> About me</a></li>
+            <li><a href="#portfolio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> Experience</a></li>
+            <li><a href="#terminal"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 3H5v4H3v6h2v2h2v2h2v2h2v2h2v-2h2v-2h2v-2h2v-2h2V7h-2V3h-4v4h-4V3z"/></svg> Gratitude</a></li>
+            <li><a href="mailto:marioo.maciaas@gmail.com" class="btn-cyan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> marioo.maciaas@gmail.com</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+
+        <!-- SECCIÓN: ABOUT ME -->
+        <div class="glass-panel" id="about">
+            <div class="window-header">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+            </div>
+            <br>
+            <div id="about-content">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ffcc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    About me
+                </h2>
+                <p>
+                    Hello! My name is Mario Macias. I am passionate about technology, systems administration, and continuous learning. My goal is to combine infrastructure support with modern development practices to create efficient and scalable solutions :)
+                </p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: EXPERIENCE -->
+        <div class="glass-panel" id="portfolio">
+            <div class="window-header">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+            </div>
+            <br>
+            <div id="portfolio-content">
+                <h1>Esmark Experience</h1>
+                <p style="color: #888; font-family: Arial;">Trial Documentation</p>
+
+                <h3>> Professional Profile & Vision (Baseline)</h3>
+                <p>I have designed this portfolio as my <strong>technical baseline</strong>, created after my 3-day trial period at <strong>Esmark</strong>. The purpose of this document is to establish my exact starting point so that, in the future, I can compare my evolution, and evaluate my progress</p>
+
+                <h3>> Acquired Knowledge & Technical Evolution</h3>
+                <p>During these days of technical immersion, I grasped the companys network architecture, internal tools, and backend under the guidance of <strong>Juan</strong>:</p>
+                <ul>
+                    <li><strong>Networking & Local Environments:</strong> Routing principles, security protocols (<strong>TLS/SSL</strong>), and <strong>localhost</strong> environments.</li>
+                    <li><strong>CLI Operations:</strong> Command-line interface via <strong>CMD</strong> and operations in <strong>Bash</strong> scripts.</li>
+                    <li><strong>Development Ecosystem:</strong> Initial exposure to <strong>Node.js</strong> and the utility of the <strong>npm</strong> package manager.</li>
+                    <li><strong>Integrated Tech Stack:</strong> Corporate tools such as <strong>RustDesk</strong> and <strong>Microsoft Dynamics 365 Business Central</strong>.</li>
+                </ul>
+
+                <h3 style="margin-top: 30px;">> Learning Roadmap</h3>
+                <p><strong>Listenig to adiveces</strong>. I have decided to focused on the web stack: <strong>JavaScript, HTML, and CSS</strong>. My short to medium goal is to improving the reading and writing in code and to understand the tools we support.</p>
+
+                <h3 style="margin-top: 30px;">>Operations performed/Days </h3>
+                <ul>
+                    <li><strong>Day 1: Identity Management, ERP & Hardware</strong><br>
+                    Remote Assistance via RustDesk, IAM with QR codes, and ERP Administration in Business Central.</li>
+                    <li><strong>Day 2: Device Provisioning & Kiosks</strong><br>
+                    Hardware Deployment (Lenovo reset) and Kiosk Demo Environment Configuration (assigned access mode).</li>
+                    <li><strong>Day 3: Consolidation & Resolution</strong><br>
+                    Successfully completing final trial tasks and validating systems alongside the team.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: GRATITUDE (LA TERMINAL ANIMADA) -->
+        <div class="glass-panel" id="terminal">
+            <div class="window-header">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+            </div>
+            <br>
+
+            <div id="consola">
+                <p>Esperando conexión del usuario... <span class="cursor">█</span></p>
+            </div>
+
+            <div id="contenido-final" class="oculto terminal-content">
+                <p style="text-align:left; color:#00ffcc;" id="type1"></p>
+                <p style="text-align:left; color:#00ffcc;" id="type2"></p>
+                <p style="text-align:left; color:#00ffcc;" id="type3"></p>
+                <br>
+                
+                <pre id="ascii-art" class="oculto" style="color: #ffffff;">
+  ____                 _               _____                          _        
+ / ___| _ __ __ _  ___(_) __ _ ___    | ____|___ _ __ ___   __ _ _ __| | __  
+| |  _ | '__/ _` |/ __| |/ _` / __|   |  _| / __| '_ ` _ \ / _` | '__| |/ /     
+| |_| || | | (_| | (__| | (_| \__ \   | |___\__ \ | | | | | (_| | |  |   <     
+ \____||_|  \__,_|\___|_|\__,_|___/   |_____|___/_| |_| |_|\__,_|_|  |_|\_\  
+                </pre>
+                
+                <pre id="coche" class="oculto" style="color: #00ffcc;"></pre>
+                <br>
+                <p id="final-msg" class="oculto" style="color: #ffffff; font-size: 1.2em;"><strong>Thanks u Juan and the team for this days! See u soon.</strong></p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT CENTRAL -->
+    <script>
+        // --- 0. OBLIGAR AL NAVEGADOR A EMPEZAR ARRIBA DEL TODO ---
+        if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+        window.scrollTo(0, 0);
+
+        // --- VARIABLES DE ESTADO PARA EL BLOQUEO INTELIGENTE ---
+        let escrituraCompletada = false;
+        let terminalEnPantalla = false;
+        let terminalIniciada = false;
+
+        // --- 1. LÓGICA DEL PRELOADER Y EL TIPO HACKER ---
+        const aboutDiv = document.getElementById('about-content');
+        const aboutHTML = aboutDiv.innerHTML; aboutDiv.innerHTML = "";
+        
+        const portfolioDiv = document.getElementById('portfolio-content');
+        const portfolioHTML = portfolioDiv.innerHTML; portfolioDiv.innerHTML = "";
+
+        function typeHTML(elementoId, html, velocidad, callback) {
+            let i = 0; let text = ""; let elemento = document.getElementById(elementoId);
+            function escribir() {
+                if (i < html.length) {
+                    let char = html.charAt(i);
+                    text += char; i++;
+                    if (char === '<') {
+                        while (i < html.length && html.charAt(i-1) !== '>') { text += html.charAt(i); i++; }
+                        elemento.innerHTML = text; escribir(); 
+                    } else {
+                        elemento.innerHTML = text; setTimeout(escribir, velocidad); 
+                    }
+                } else if (callback) { callback(); }
+            }
+            escribir();
+        }
+
+        // CONTROL DEL PRELOADER (Animación tipo consola .)
+        setTimeout(() => {
+            const preloader = document.getElementById('preloader');
+            preloader.style.opacity = '0'; 
+            
+            setTimeout(() => {
+                preloader.style.display = 'none'; 
+                
+                // ARRANCAN LAS LETRAS A 7ms (Velocidad rápida)
+                typeHTML('about-content', aboutHTML, 7, () => {
+                    typeHTML('portfolio-content', portfolioHTML, 7, () => {
+                        // CUANDO TERMINA DE ESCRIBIR TODO, DESBLOQUEA LA TERMINAL
+                        escrituraCompletada = true;
+                        comprobarYArrancarTerminal();
+                    });
+                });
+            }, 800); 
+            
+        }, 2500); 
+
+
+        // --- 2. LÓGICA DE LA TERMINAL ANIMADA ---
+        const cocheLineas = ["       ______", "      /|_||_\\`.__", "     (   _    _ _\\", "     =`-(_)--(_)-'"];
+
+        function typeLine(texto, elementoId, velocidad, callback) {
+            let i = 0; document.getElementById(elementoId).innerHTML += "> ";
+            function escribir() {
+                if (i < texto.length) {
+                    document.getElementById(elementoId).innerHTML += texto.charAt(i); i++;
+                    setTimeout(escribir, velocidad);
+                } else if (callback) { setTimeout(callback, 500); }
+            }
+            escribir();
+        }
+
+        function comprobarYArrancarTerminal() {
+            if (escrituraCompletada && terminalEnPantalla && !terminalIniciada) {
+                terminalIniciada = true; 
+                
+                setTimeout(() => {
+                    const consola = document.getElementById('consola');
+                    consola.innerHTML = "<p>Ejecutando script de agradecimiento final... <span class='cursor'>█</span></p>";
+                    
+                    setTimeout(() => {
+                        consola.innerHTML = "<p>Iniciando script de agradecimiento... [OK] <span class='cursor'>█</span></p>";
+                        
+                        setTimeout(() => {
+                            consola.classList.add('oculto');
+                            document.getElementById('contenido-final').classList.remove('oculto');
+                            
+                            typeLine("Trail done By: Mario Macias.", "type1", 40, () => {
+                                typeLine("State: Focus In continue Learning.", "type2", 40, () => {
+                                    typeLine("Loading final message...", "type3", 40, () => {
+                                        
+                                        document.getElementById('ascii-art').classList.remove('oculto');
+                                        document.getElementById('coche').classList.remove('oculto');
+                                        document.getElementById('final-msg').classList.remove('oculto');
+
+                                        let distancia = 0;
+                                        const cocheEl = document.getElementById('coche');
+                                        
+                                        setInterval(() => {
+                                            let espacio = " ".repeat(distancia);
+                                            let cocheEnMovimiento = cocheLineas.map(linea => espacio + linea).join('\n');
+                                            cocheEl.textContent = '\n' + cocheEnMovimiento + '\n';
+                                            distancia += 2; 
+                                            if (distancia > 65) { distancia = 0; }
+                                        }, 80);
+                                        
+                                    });
+                                });
+                            });
+
+                        }, 3000); 
+                    }, 3000); 
+                }, 2000); 
+            }
+        }
+
+        // SENSOR DE SCROLL
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    terminalEnPantalla = true;
+                    comprobarYArrancarTerminal(); 
+                } else {
+                    terminalEnPantalla = false;
+                }
+            });
+        }, { threshold: 0.3 }); 
+
+        observer.observe(document.getElementById('terminal'));
+
+    </script>
+</body>
+</html>
