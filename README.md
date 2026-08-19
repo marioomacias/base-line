@@ -6,6 +6,7 @@ Este proyecto es una carta de presentación interactiva donde detallo mi perfil,
 
  🌐 Proyecto en vivo
 Puedes ver el portafolio funcionando y desplegado aquí: 
+
 👉 https://base-line-git-main-marioomacias-projects.vercel.app/
 
 ## 🛠️ Tecnologías y Herramientas utilizadas
